@@ -5,7 +5,7 @@
 #define stepPin 5
 #define motorInterfaceType 1
 
-int state = true;
+int loopState = true;
 int value = digitalRead(2);
 
 // Definition of function prototypes:
@@ -19,14 +19,18 @@ void setup() {
   stepper.setMaxSpeed(1000);
   stepper.setAcceleration(500);
   stepper.setSpeed(50);
+
   attachInterrupt(digitalPinToInterrupt(2), switchInterrupt, FALLING);
+
   Serial.begin(9600);
+  
   pinMode(2,INPUT_PULLUP);
+  
   
 }
 
 void loop() {
-  while (state){
+  while (loopState){
     // Set the target position:
     Serial.println(value);
     
@@ -46,6 +50,7 @@ void loop() {
 void switchInterrupt (){
   stepper.stop();
   //delay(1000);
-  state = false;
+  loopState = false;
+  
 
   }
