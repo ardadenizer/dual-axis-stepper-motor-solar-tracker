@@ -50,20 +50,23 @@ void loop() {
   for (stepCounter = 1; stepCounter <= max_step; stepCounter++ ){
     stepper.moveTo(-stepCounter);
     stepper.runToPosition();
-
+    
+    Serial.print("Step counter value:");
     Serial.println(-stepCounter);
 
 
     if (loop_flag_break == true) break;
   }
   // Moving to flat position 
+  Serial.println("Motor is moving to flat ");
   stepper.moveTo(1600);
   // Run to target position with set speed and acceleration/deceleration:
   stepper.runToPosition();
-  delay(200);
+  stepper.stop();
+  
 
   Serial.println("Program is finished. The panel pos shall be flat");
-  stepper.stop();
+  
   break;
   }
 }
