@@ -18,7 +18,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-    stepper.moveTo(3200);
+    stepper.moveTo(-1000);
     // Run to target position with set speed and acceleration/deceleration:
     stepper.runToPosition();
 
