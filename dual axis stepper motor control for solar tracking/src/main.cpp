@@ -1,78 +1,41 @@
 #include <Arduino.h>
-#include <AccelStepper.h>
-// Define stepper motor connections and motor interface type. Motor interface type must be set to 1 when using a driver:
-#define dirPin 4
-#define stepPin 5
-#define motorInterfaceType 1
 
-// Global variables 
-int loopState = true; // while loop state for terminating the program. 
-volatile int switchValue = digitalRead(2);
-long int stepPos = 0;
-unsigned long int stepCounter = 0;
-unsigned int max_step = 4000;
-bool loop_flag_break = false; // loop flag responsible of for loop breaking for position setting 
+int analogPin3 = A3;
+int analogPin4 = A4;
+int analogPin2 = A2;
+int analogPin1 = A1;
 
-// Definition of function prototypes:
-void switchInterrupt (void);
-
-// Create a new instance of the AccelStepper class:
-AccelStepper stepper = AccelStepper(motorInterfaceType, stepPin, dirPin);
-
+ 
+  
 void setup() {
-  
-   Serial.begin(9600);
-
-  attachInterrupt(digitalPinToInterrupt(2), switchInterrupt, FALLING);
-
-  pinMode(2,INPUT_PULLUP);
-  
-  // Set the maximum speed and acceleration:
-  stepper.setMaxSpeed(1000);
-  stepper.setAcceleration(500);
-  stepper.setSpeed(50);
-
-  // Initialization: setting stepper to the switch position and making it stay in 90 degrees
-
-  
+  Serial.begin(9600);           //  setup serial
 }
 
 void loop() {
+  volatile int bottom_right_val = analogRead(analogPin3);
+  bottom_right_val =  map (bottom_right_val, 0 , 1023, 0, 255 );
 
-  while (true){
-  
-  // Set the target position:
-  // Serial.println(switchValue);
-  
-  // Pos 1600: 90 degrees , 3200: 180 degrees at 1/8 , -ve value means reverse direction
-  Serial.println("Entering into the for loop");
+  volatile int top_right_val = analogRead(analogPin4);
+  top_right_val =  map (top_right_val, 0 , 1023, 0, 255 );
 
-  for (stepCounter = 1; stepCounter <= max_step; stepCounter++ ){
-    stepper.moveTo(-stepCounter);
-    stepper.runToPosition();
-    
-    Serial.print("Step counter value:");
-    Serial.println(-stepCounter);
+  volatile int bottom_left_val = analogRead(analogPin2);
+  bottom_left_val =  map (bottom_left_val, 0 , 1023, 0, 255 );
 
+  volatile int top_left_val  = analogRead(analogPin1);
+  top_left_val =  map (top_left_val, 0 , 1023, 0, 255 );  
+    // read the input pin
+  Serial.print("Bottom Right: ");
+  Serial.println(bottom_right_val); 
 
-    if (loop_flag_break == true) break;
-  }
-  // Moving to flat position 
-  Serial.println("Motor is moving to flat ");
-  stepper.moveTo(1600);
-  // Run to target position with set speed and acceleration/deceleration:
-  stepper.runToPosition();
-  stepper.stop();
-  
+  Serial.print("Top Right   : "); 
+  Serial.println(top_right_val);
 
-  Serial.println("Program is finished. The panel pos shall be flat");
-  
-  break;
-  }
+  Serial.print("Bottom Left : ");
+  Serial.println(bottom_left_val);
+
+  Serial.print("Top Left    : "); 
+  Serial.println(top_left_val);
+
+  delay (1000);
+
 }
-void switchInterrupt (){
-    //stepper.stop();
-    stepper.setCurrentPosition(0);
-    loop_flag_break = true;
-
-  }
