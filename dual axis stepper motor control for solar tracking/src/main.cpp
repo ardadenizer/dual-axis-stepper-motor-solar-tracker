@@ -31,8 +31,8 @@ Stepper motorVertical(stepsPerRevolution,8,9); // create a stepper object
 Stepper motorHorizontal(stepsPerRevolution,4,5); // create a stepper object
 
 void setup() {
-  motorVertical.setSpeed(200); // set the speed of the stepper motor
-  motorHorizontal.setSpeed(200);
+  motorVertical.setSpeed(70); // set the speed of the stepper motor
+  motorHorizontal.setSpeed(70);
   Serial.begin(9600);
 }
 
@@ -43,15 +43,15 @@ void loop() {
   volatile int bottomLeftVal = analogRead(bottomLeft);
 
   volatile int verticalDiff = (topRightVal + bottomRightVal) - (topLeftVal + bottomLeftVal);
-  volatile int horizontalDiff = (topRightVal + topLeftVal) - (bottomRightVal + bottomLeftVal); 
+  volatile int horizontalDiff = (topLeftVal + bottomLeftVal) - (topRightVal + bottomRightVal); 
 
-  volatile int  adcValue = analogRead(voltPin);
+  // volatile int  adcValue = analogRead(voltPin);
 
-  adcVoltage = (adcValue * refVoltage) / 1024.0;
-  inputVoltage = adcVoltage / (R2 / (R1 + R2));
+  // adcVoltage = (adcValue * refVoltage) / 1024.0;
+  // inputVoltage = adcVoltage / (R2 / (R1 + R2));
 
-  Serial.print("Input voltage =");
-  Serial.println(inputVoltage,2);
+  // Serial.print("Input voltage =");
+  // Serial.println(inputVoltage,2);
 
   
 
