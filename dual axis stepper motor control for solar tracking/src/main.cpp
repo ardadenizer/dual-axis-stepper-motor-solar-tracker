@@ -25,11 +25,20 @@ void loop() {
   volatile int topRightVal = analogRead(topRight);
   volatile int bottomRightVal = analogRead(bottomRight);
   volatile int bottomLeftVal = analogRead(bottomLeft);
-  
-  volatile int verticalDiff = topRightVal - topLeftVal;
+
+  volatile int verticalDiff = (topRightVal + bottomRightVal) - (topLeftVal + bottomLeftVal);
+  volatile int horizontalDiff = (topRightVal + topLeftVal) - (bottomRightVal + bottomLeftVal); 
   
 
-  
+   if (horizontalDiff > 0 && stepCountHorizontal < maxStepCountHorizontal) {
+    // move clockwise
+    motorHorizontal.step(1);
+    stepCountHorizontal++;
+  } else if (horizontalDiff < 0 && stepCountHorizontal > -maxStepCountHorizontal) {
+    // move counter-clockwise
+    motorHorizontal.step(-1);
+    stepCountHorizontal--;
+  }
   if (verticalDiff > 0 && stepCountVertical < maxStepCountVertical) {
     // move clockwise
     motorVertical.step(1);
@@ -39,6 +48,7 @@ void loop() {
     motorVertical.step(-1);
     stepCountVertical--;
   }
+ 
   // delay is added to slow down the stepper motor and make it more visible
  // delay(50);
 }
