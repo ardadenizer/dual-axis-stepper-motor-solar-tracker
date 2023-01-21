@@ -21,9 +21,14 @@ void setup() {
 }
 
 void loop() {
-  volatile int ldr1Value = analogRead(topLeft);
-  volatile int ldr2Value = analogRead(topRight);
-  volatile int verticalDiff = ldr2Value - ldr1Value;
+  volatile int topLeftVal = analogRead(topLeft);
+  volatile int topRightVal = analogRead(topRight);
+  volatile int bottomRightVal = analogRead(bottomRight);
+  volatile int bottomLeftVal = analogRead(bottomLeft);
+  
+  volatile int verticalDiff = topRightVal - topLeftVal;
+  
+
   
   if (verticalDiff > 0 && stepCountVertical < maxStepCountVertical) {
     // move clockwise
