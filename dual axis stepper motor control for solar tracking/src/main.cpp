@@ -2,30 +2,37 @@
 #include <Arduino.h>
 
 const int stepsPerRevolution = 200; // change this to match the number of steps per revolution for your stepper motor
-const int ldr1Pin = A2;
-const int ldr2Pin = A3;
-const int maxStepCount = 500; // maximum step count limit for the stepper motor
-int stepCount = 0; // current step count
+const int topRight = A4;
+const int topLeft = A1; // Top left LDR
+const int bottomRight = A3;
+const int bottomLeft = A2;
+ 
+const int maxStepCountVertical = 1160; // maximum step count limit for the stepper motor
+const int maxStepCountHorizontal = 500;
+int stepCountVertical = 0; // current step count
+int stepCountHorizontal = 0;
 
-Stepper motor(stepsPerRevolution,4,5); // create a stepper object
+Stepper motorVertical(stepsPerRevolution,8,9); // create a stepper object
+Stepper motorHorizontal(stepsPerRevolution,4,5); // create a stepper object
 
 void setup() {
-  motor.setSpeed(70); // set the speed of the stepper motor
+  motorVertical.setSpeed(70); // set the speed of the stepper motor
+  motorHorizontal.setSpeed(70);
 }
 
 void loop() {
-  int ldr1Value = analogRead(ldr1Pin);
-  int ldr2Value = analogRead(ldr2Pin);
-  int ldrDiff = ldr1Value - ldr2Value;
+  volatile int ldr1Value = analogRead(topLeft);
+  volatile int ldr2Value = analogRead(topRight);
+  volatile int verticalDiff = ldr2Value - ldr1Value;
   
-  if (ldrDiff > 0 && stepCount < maxStepCount) {
+  if (verticalDiff > 0 && stepCountVertical < maxStepCountVertical) {
     // move clockwise
-    motor.step(1);
-    stepCount++;
-  } else if (ldrDiff < 0 && stepCount > -maxStepCount) {
+    motorVertical.step(1);
+    stepCountVertical++;
+  } else if (verticalDiff < 0 && stepCountVertical > -maxStepCountVertical) {
     // move counter-clockwise
-    motor.step(-1);
-    stepCount--;
+    motorVertical.step(-1);
+    stepCountVertical--;
   }
   // delay is added to slow down the stepper motor and make it more visible
  // delay(50);
