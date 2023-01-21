@@ -34,6 +34,7 @@ void switchInterrupt(){
 
   stepper.stop();
   stepper.setCurrentPosition(0);
+
   number = 0;
   
 }

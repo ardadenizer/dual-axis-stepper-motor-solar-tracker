@@ -1,14 +1,21 @@
 #include <Arduino.h>
+#include <Stepper.h>
+
 
 int analogPin3 = A3;
 int analogPin4 = A4;
 int analogPin2 = A2;
 int analogPin1 = A1;
 
+const int stepsPerRevolution = 600;
+
+Stepper myStepper(stepsPerRevolution, 4,5);
+
  
   
 void setup() {
   Serial.begin(9600);           //  setup serial
+  myStepper.setSpeed(200);
 }
 
 void loop() {
@@ -37,5 +44,12 @@ void loop() {
   Serial.println(top_left_val);
 
   delay (1000);
+
+   Serial.println("clockwise");
+  myStepper.step(stepsPerRevolution);
+  delay (1000);
+   myStepper.step(0);
+  delay(1000);
+  myStepper.step(stepsPerRevolution);
 
 }
